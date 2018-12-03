@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 // import * as BooksAPI from './BooksAPI'
+import BookShelfType from './BookShelfType'
 import './App.css'
 
 class BooksApp extends Component {
@@ -102,91 +103,9 @@ class BooksApp extends Component {
             </div>
             <div className="list-books-content">
               <div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Currently Reading</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                    {CurrentlyReading.map((curr)=>
-                    (
-                      <li key={curr.title}>
-                        <div className="book">
-                          <div className="book-top">
-                            <div className="book-cover"
-                            style={{width: 128, height: 192, backgroundImage: `url(${curr.coverUrl})` }}></div>
-                            <div className="book-shelf-changer">
-                              <select>
-                                <option value="move" disabled>Move to...</option>
-                                <option value="currentlyReading">Currently Reading</option>
-                                <option value="wantToRead">Want to Read</option>
-                                <option value="read">Read</option>
-                                <option value="none">None</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="book-title">{curr.title}</div>
-                          <div className="book-authors">{curr.authors}</div>
-                        </div>
-                      </li>
-                    ))}
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Want to Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                    {WantToRead.map((wr)=>
-                    (
-                      <li key={wr.title}>
-                        <div className="book">
-                          <div className="book-top">
-                            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${wr.coverUrl})` }}></div>
-                            <div className="book-shelf-changer">
-                              <select>
-                                <option value="move" disabled>Move to...</option>
-                                <option value="currentlyReading">Currently Reading</option>
-                                <option value="wantToRead">Want to Read</option>
-                                <option value="read">Read</option>
-                                <option value="none">None</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="book-title">{wr.title}</div>
-                          <div className="book-authors">{wr.authors}</div>
-                        </div>
-                      </li>
-                    ))}
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                      {Read.map((r)=>
-                      (
-                       <li key={r.title}>
-                        <div className="book">
-                          <div className="book-top">
-                            <div className="book-cover" style={{ width: r.height, height: 192, backgroundImage: `url(${r.coverUrl})`}}></div>
-                            <div className="book-shelf-changer">
-                              <select>
-                                <option value="move" disabled>Move to...</option>
-                                <option value="currentlyReading">Currently Reading</option>
-                                <option value="wantToRead">Want to Read</option>
-                                <option value="read">Read</option>
-                                <option value="none">None</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="book-title">{r.title}</div>
-                          <div className="book-authors">{r.authors}</div>
-                        </div>
-                       </li>
-                    ))}
-                    </ol>
-                  </div>
-                </div>
+              <BookShelfType bookList={CurrentlyReading} shelfType=" Currently Reading"/>
+              <BookShelfType bookList={WantToRead} shelfType=" Want to Read"/>
+              <BookShelfType bookList={Read} shelfType=" Read"/>
               </div>
             </div>
             <div className="open-search">
