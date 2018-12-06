@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import * as BooksAPI from './BooksAPI'
 import Books from './Books'
 import '../App.css'
-import escapeRegExp from 'escape-string-regexp'
-//import sortBy from 'sort-by'
-
+import * as BooksAPI from './BooksAPI'
 class Search extends Component {
   state = {
     query: '',
-    books: []
   }
 
   updateQuery = (query) => {
@@ -19,25 +15,26 @@ class Search extends Component {
     this.setState({ query: '' })
   }
 
-  componentDidMount() {
-    BooksAPI.getAll().then((books) => {
-      this.setState({
-        books
-      })
-    })
-  }
 
+
+  updateShelfFromSearch= (book, newShelf, prevShelf)=> {
+    console.log("Inside updateShelfFromSearch")
+    if(this.props.onShelfChange)
+    {
+      this.props.onShelfChange(book, newShelf, prevShelf);
+    }
+  }
   render() {
     let filteredBooks
-    const { books } = this.state
     const { query } = this.state
+    var list = this.props.bookList;
     if (query)
     {
-      const match = new RegExp(escapeRegExp(query))
-      filteredBooks = books.filter( (book) => (match.test(book.title) || match.test(book.authors) ))
+      filteredBooks = BooksAPI.search(query).then((b)=>{b.map()});
+      console.log("after search:" + filteredBooks)
     }
     else {
-      filteredBooks = books
+      filteredBooks = list
     }
     return(
       <div className="search-books">
@@ -51,12 +48,11 @@ class Search extends Component {
           </div>
         </div>
         <div className="search-books-results">
-         <Books onShelfChange= {
-          (book, newShelf)=>
-          {this.props.updateShelf(book, newShelf, "search")
-          }
+         <Books onChangeBookCategory= {(book, newShelf, prevShelf)=>{
+             this.updateShelfFromSearch(book, newShelf, prevShelf)
+           }
          }
-         bookList={filteredBooks} shelfType="Book Store" shelfVal ="none"/>
+          bookList={filteredBooks}/>
         </div>
       </div>
     );

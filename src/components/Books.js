@@ -15,7 +15,6 @@ class Books extends Component {
 
    render(){
      var list = this.props.bookList;
-     var shelfVal = this.props.shelfVal;
      return(
        <ol className="books-grid">
        {list.map((book)=>(
@@ -26,8 +25,8 @@ class Books extends Component {
                style={{width: 128, height: 192, backgroundImage: `url(${book.imageLinks.thumbnail})` }}>
                </div>
                <div className="book-shelf-changer">
-                     <select value={shelfVal} onChange={(event)=>{
-                       this.handleChange(book, event.target.value, shelfVal)
+                     <select value={book.shelf} onChange={(event)=>{
+                       this.handleChange(book, event.target.value, book.shelf)
                      }}>
                         <option value="move" disabled>Move to</option>
                         <option value="currentlyReading">Currently Reading</option>

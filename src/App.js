@@ -7,14 +7,16 @@ class BooksApp extends Component {
     CurrentlyReading: [],
     WantToRead: [],
     Read: [],
-    showSearchPage: false
+    All:[],
+    showSearchPage: true
    }
   componentDidMount() {
       BooksAPI.getAll().then((books) => {
       this.setState({
         CurrentlyReading : books.filter((b)=> b.shelf === "currentlyReading"),
         WantToRead : books.filter((b)=> b.shelf === "wantToRead"),
-        Read : books.filter((b)=> b.shelf === "read")
+        Read : books.filter((b)=> b.shelf === "read"),
+        All: books
       })
     })
   }
@@ -64,18 +66,36 @@ class BooksApp extends Component {
     }
   }
   updateShelf= (book, newShelf, prevShelf)=> {
+    console.log("inside App callback");
+    console.log("new shelf:" + newShelf);
+    console.log("prev shelf:" + prevShelf);
     this.removeFromShelf(book, prevShelf);
     this.addToShelf(book, newShelf);
+
+    var bookId = book.id;
+    this.setState((state) => ({
+       All: state.All.map((b)=>{
+         if(b.id === bookId)
+         {
+           b.shelf = newShelf;
+         }
+          return b;
+       })
+
+    }));
     BooksAPI.update(book, newShelf);
+   console.log(this.state.All);
   }
   render() {
     var { CurrentlyReading } = this.state
     var { WantToRead } = this.state
     var { Read } = this.state
+    var { All } = this.state
     return (
       <div className="app">
         {this.state.showSearchPage ? (
-          <Search/>
+          <Search onShelfChange = {(book, prevShelf, newShelf) =>{this.updateShelf(book, prevShelf,
+           newShelf)} } bookList={All}/>
         ) : (
           <div className="list-books">
             <div className="list-books-title">
