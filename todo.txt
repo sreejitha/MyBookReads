@@ -1,0 +1,2 @@
+1> Use Search API to retrieve results in Search page and not RegExp
+4> Routing- Done
