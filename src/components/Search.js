@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import Books from './Books'
 import '../App.css'
 import * as BooksAPI from './BooksAPI'
+
 class Search extends Component {
   state = {
     query: '',
+    filteredBooks :[]
   }
 
   updateQuery = (query) => {
@@ -15,8 +17,6 @@ class Search extends Component {
     this.setState({ query: '' })
   }
 
-
-
   updateShelfFromSearch= (book, newShelf, prevShelf)=> {
     console.log("Inside updateShelfFromSearch")
     if(this.props.onShelfChange)
@@ -25,17 +25,23 @@ class Search extends Component {
     }
   }
   render() {
-    let filteredBooks
+    var { filteredBooks } = this.state
     const { query } = this.state
     var list = this.props.bookList;
     if (query)
     {
-      filteredBooks = BooksAPI.search(query).then((b)=>{b.map()});
-      console.log("after search:" + filteredBooks)
+       BooksAPI.search(query).then((books)=>{
+         this.setState({
+         filteredBooks : books
+         })
+         console.log("filtered books")
+         console.log(filteredBooks)
+      })
     }
     else {
       filteredBooks = list
     }
+
     return(
       <div className="search-books">
         <div className="search-books-bar">
@@ -48,11 +54,12 @@ class Search extends Component {
           </div>
         </div>
         <div className="search-books-results">
-         <Books onChangeBookCategory= {(book, newShelf, prevShelf)=>{
-             this.updateShelfFromSearch(book, newShelf, prevShelf)
-           }
+         {Array.isArray(filteredBooks)  && filteredBooks.length > 0 &&
+          (<Books onChangeBookCategory= {(book, newShelf, prevShelf)=>{
+              this.updateShelfFromSearch(book, newShelf, prevShelf)
+            }}
+           bookList={filteredBooks}/>)
          }
-          bookList={filteredBooks}/>
         </div>
       </div>
     );

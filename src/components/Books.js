@@ -17,8 +17,9 @@ class Books extends Component {
      var list = this.props.bookList;
      return(
        <ol className="books-grid">
-       {list.map((book)=>(
-         <li key={book.title}>
+       {
+         list.map((book)=>(
+         <li key={book.id}>
            <div className="book">
              <div className="book-top">
                <div className="book-cover"
