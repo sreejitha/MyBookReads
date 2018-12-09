@@ -14,26 +14,19 @@ class Books extends Component {
   }
 
    render(){
-     var list = this.props.bookList;
-     console.log("Rendering")
-     for(var i=0; i<list.length; i++)
-     {
-       console.log("i:" + list[i].shelf)
-     }
+     var bk = this.props.book;
+     console.log("id"+ bk.id);
      return(
-       <ol className="books-grid">
-       {
-         list.map((book)=>(
-         <li key={book.id}>
+         <li key={bk.id}>
            <div className="book">
              <div className="book-top">
                <div className="book-cover"
                style={
-                 {width: 128, height: 192, backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail})` }}>
+                 {width: 128, height: 192, backgroundImage: `url(${bk.imageLinks && bk.imageLinks.thumbnail})` }}>
                </div>
                <div className="book-shelf-changer">
-                     <select value= {book.shelf? book.shelf: "none"} onChange={(event)=>{
-                       this.handleChange(book, event.target.value, book.shelf)
+                     <select value= {bk.shelf? bk.shelf: "none"} onChange={(event)=>{
+                       this.handleChange(bk, event.target.value, bk.shelf)
                      }}>
                         <option value="move" disabled>Move to</option>
                         <option value="currentlyReading">Currently Reading</option>
@@ -43,14 +36,10 @@ class Books extends Component {
                      </select>
                </div>
              </div>
-             <div className="book-title">{book.title}</div>
-             <div className="book-authors">{book.authors}</div>
+             <div className="book-title">{bk.title}</div>
+             <div className="book-authors">{bk.authors}</div>
            </div>
          </li>
-       )
-     )
-       }
-       </ol>
      );
    }
 }

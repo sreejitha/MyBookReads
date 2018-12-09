@@ -16,13 +16,16 @@ class BookShelfType extends Component {
        <div className="bookshelf">
          <h2 className="bookshelf-title">{shelfType}</h2>
          <div className="bookshelf-books">
-            <Books onChangeBookCategory= {
-              (book, prevShelf, newShelf)=>
-              {this.passBackToApp(book, prevShelf, newShelf)
-              }
-             } bookList={list} shelfVal={shelfVal}/>
+             <ol className="books-grid">
+                 {Array.isArray(list)  && list.length > 0 && list.map((book)=>(
+                    <Books onChangeBookCategory= {
+                      (book, prevShelf, newShelf)=>
+                      {this.passBackToApp(book, prevShelf, newShelf)
+                      }
+                  } book={book} shelfVal={shelfVal}/>))}
+             </ol>
         </div>
-        </div>
+      </div>
      );
   }
 }

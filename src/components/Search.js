@@ -53,12 +53,14 @@ class Search extends Component {
           </div>
         </div>
         <div className="search-books-results">
-           {Array.isArray(filteredBooks)  && filteredBooks.length > 0 &&
-            (<Books onChangeBookCategory= {(book, newShelf, prevShelf)=>{
-                this.updateShelfFromSearch(book, newShelf, prevShelf)
-              }}
-             bookList={filteredBooks}/>)
-           }
+           <ol className="books-grid">
+                 {Array.isArray(filteredBooks)  && filteredBooks.length > 0 && filteredBooks.map((bk) =>(
+                  <Books onChangeBookCategory= {(book, newShelf, prevShelf)=>{
+                      this.updateShelfFromSearch(book, newShelf, prevShelf)
+                    }}
+                   book={bk}/>))
+                 }
+           </ol>
         </div>
       </div>
     );
