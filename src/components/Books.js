@@ -1,7 +1,6 @@
 import React, {
   Component
 } from 'react';
-
 class Books extends Component {
 
   /*handles moves from one book grid to another*/
@@ -9,13 +8,18 @@ class Books extends Component {
     if (this.props.onChangeBookCategory) {
       console.log("book:" + book.title);
       console.log("event target:" + newShelf);
+      console.log("prev shelf:" + prevShelf);
       this.props.onChangeBookCategory(book, newShelf, prevShelf);
     }
   }
 
    render(){
      var list = this.props.bookList;
-
+     console.log("Rendering")
+     for(var i=0; i<list.length; i++)
+     {
+       console.log("i:" + list[i].shelf)
+     }
      return(
        <ol className="books-grid">
        {
@@ -28,7 +32,7 @@ class Books extends Component {
                  {width: 128, height: 192, backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail})` }}>
                </div>
                <div className="book-shelf-changer">
-                     <select value={book.shelf} onChange={(event)=>{
+                     <select value= {book.shelf? book.shelf: "none"} onChange={(event)=>{
                        this.handleChange(book, event.target.value, book.shelf)
                      }}>
                         <option value="move" disabled>Move to</option>

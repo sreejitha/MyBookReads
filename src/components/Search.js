@@ -11,6 +11,19 @@ class Search extends Component {
 
   updateQuery = (query) => {
     this.setState({ query})
+    if (query)
+    {
+       BooksAPI.search(query).then((books)=>{
+         this.setState({
+         filteredBooks : books
+         })
+      })
+    }
+    else {
+      this.setState({
+      filteredBooks : []
+      })
+    }
   }
 
   clearQuery = () => {
@@ -25,23 +38,9 @@ class Search extends Component {
     }
   }
   render() {
+    console.log("rendering")
     var { filteredBooks } = this.state
     const { query } = this.state
-    var list = this.props.bookList;
-    if (query)
-    {
-       BooksAPI.search(query).then((books)=>{
-         this.setState({
-         filteredBooks : books
-         })
-         console.log("filtered books")
-         console.log(filteredBooks)
-      })
-    }
-    else {
-      filteredBooks = list
-    }
-
     return(
       <div className="search-books">
         <div className="search-books-bar">
@@ -54,12 +53,12 @@ class Search extends Component {
           </div>
         </div>
         <div className="search-books-results">
-         {Array.isArray(filteredBooks)  && filteredBooks.length > 0 &&
-          (<Books onChangeBookCategory= {(book, newShelf, prevShelf)=>{
-              this.updateShelfFromSearch(book, newShelf, prevShelf)
-            }}
-           bookList={filteredBooks}/>)
-         }
+           {Array.isArray(filteredBooks)  && filteredBooks.length > 0 &&
+            (<Books onChangeBookCategory= {(book, newShelf, prevShelf)=>{
+                this.updateShelfFromSearch(book, newShelf, prevShelf)
+              }}
+             bookList={filteredBooks}/>)
+           }
         </div>
       </div>
     );
