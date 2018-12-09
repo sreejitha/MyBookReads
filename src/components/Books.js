@@ -15,6 +15,7 @@ class Books extends Component {
 
    render(){
      var list = this.props.bookList;
+
      return(
        <ol className="books-grid">
        {
@@ -23,7 +24,8 @@ class Books extends Component {
            <div className="book">
              <div className="book-top">
                <div className="book-cover"
-               style={{width: 128, height: 192, backgroundImage: `url(${book.imageLinks.thumbnail})` }}>
+               style={
+                 {width: 128, height: 192, backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail})` }}>
                </div>
                <div className="book-shelf-changer">
                      <select value={book.shelf} onChange={(event)=>{
@@ -41,7 +43,9 @@ class Books extends Component {
              <div className="book-authors">{book.authors}</div>
            </div>
          </li>
-       ))}
+       )
+     )
+       }
        </ol>
      );
    }
