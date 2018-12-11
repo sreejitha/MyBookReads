@@ -91,7 +91,6 @@ class BooksApp extends Component {
        })
 
     }));
-    console.log("book updated to shelf:" + book.shelf)
     /*Step 4: Update shelf val in the API*/
     BooksAPI.update(book, newShelf);
   }
