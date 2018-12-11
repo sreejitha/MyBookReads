@@ -9,16 +9,41 @@ class Search extends Component {
     filteredBooks :[]
   }
 
-  updateQuery = (query) => {
-    this.setState({ query})
-    if (query)
-    {
-       BooksAPI.search(query).then((books)=>{
-         this.setState({
-         filteredBooks : books
-         })
-      })
+  returnShelf = (obj, list) => {
+    var i;
+    console.log("searching for " + obj.title);
+    for (i = 0; i < list.length; i++) {
+        if (list[i].title === obj.title) {
+            console.log("title:" + list[i].title)
+            console.log("match found");
+            console.log("shelf:" +  list[i].shelf);
+            return list[i].shelf;
+        }
     }
+    return "not found";
+  }
+  updateQuery = (query) => {
+      this.setState({
+        query
+      })
+      if (query){
+        BooksAPI.search(query).then((books) => {
+           if (this.props.shelfBooks) {
+             var shelfBooks = this.props.shelfBooks
+            for(var book of books)
+            {
+              var shelf = this.returnShelf(book, shelfBooks);
+              if(shelf !== "not found")
+              {
+                 book.shelf =  shelf
+              }
+            }
+          }
+          this.setState({
+          filteredBooks : books
+          })
+        })
+       }
     else {
       this.setState({
       filteredBooks : []
@@ -38,7 +63,6 @@ class Search extends Component {
     }
   }
   render() {
-    console.log("rendering")
     var { filteredBooks } = this.state
     const { query } = this.state
     return(
@@ -58,7 +82,7 @@ class Search extends Component {
                   <Books onChangeBookCategory= {(book, newShelf, prevShelf)=>{
                       this.updateShelfFromSearch(book, newShelf, prevShelf)
                     }}
-                   book={bk}/>))
+                   book={bk} key={bk.id}/>))
                  }
            </ol>
         </div>

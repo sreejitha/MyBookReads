@@ -8,7 +8,7 @@ class BooksApp extends Component {
     WantToRead: [],
     Read: [],
     All:[],
-    showSearchPage: false
+    showSearchPage: true
    }
   componentDidMount() {
       BooksAPI.getAll().then((books) => {
@@ -16,6 +16,7 @@ class BooksApp extends Component {
         CurrentlyReading : books.filter((b)=> b.shelf === "currentlyReading"),
         WantToRead : books.filter((b)=> b.shelf === "wantToRead"),
         Read : books.filter((b)=> b.shelf === "read"),
+        All: books
       })
     })
   }
@@ -90,12 +91,12 @@ class BooksApp extends Component {
     var { CurrentlyReading } = this.state
     var { WantToRead } = this.state
     var { Read } = this.state
-
+    var { All } = this.state
     return (
       <div className="app">
         {this.state.showSearchPage ? (
           <Search onShelfChange = {(book, prevShelf, newShelf) =>{this.updateShelf(book, prevShelf,
-           newShelf)} }/>
+           newShelf)} } shelfBooks={All}/>
         ) : (
           <div className="list-books">
             <div className="list-books-title">

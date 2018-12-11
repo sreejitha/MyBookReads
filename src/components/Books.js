@@ -15,7 +15,6 @@ class Books extends Component {
 
    render(){
      var bk = this.props.book;
-     console.log("id"+ bk.id);
      return(
          <li key={bk.id}>
            <div className="book">
