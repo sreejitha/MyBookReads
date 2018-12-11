@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import BookShelfType from './components/BookShelfType'
 import Search from './components/Search'
 import * as BooksAPI from './components/BooksAPI'
@@ -9,8 +11,7 @@ class BooksApp extends Component {
     Read: [],
     /*All categories of books present in the shelf, unfiltered by
     shelf category*/
-    All:[],
-    showSearchPage: false
+    All:[]
    }
 
   componentDidMount() {
@@ -101,11 +102,13 @@ class BooksApp extends Component {
     var { All } = this.state
     return (
       <div className="app">
-        {this.state.showSearchPage ? (
-          <Search onShelfChange = {(book, prevShelf, newShelf) =>{this.updateShelf(book, prevShelf,
+         <Route exact path="/search" render= {()=>
+          (<Search onShelfChange = {(book, prevShelf, newShelf) =>{this.updateShelf(book, prevShelf,
            newShelf)} } shelfBooks={All}/>
-        ) : (
-          <div className="list-books">
+          )
+         }/>
+          <Route exact path="/" render = {() =>
+          (<div className="list-books">
             <div className="list-books-title">
               <h1>MyReads</h1>
             </div>
@@ -123,11 +126,14 @@ class BooksApp extends Component {
               </div>
             </div>
             <div className="open-search">
-              <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
+              <Link to="/search">
+                <button>Add a book</button>
+              </Link>
             </div>
           </div>
-        )}
-      </div>
+          )
+          }/>
+       </div>
     )
   }
 }
