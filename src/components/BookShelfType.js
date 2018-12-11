@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import Books from './Books'
 class BookShelfType extends Component {
-  passBackToApp(book, newShelf, prevShelf)
+
+  /*passes info on changed book shelf back to the function call-back prop
+  (onShelfChange)
+  given by parent: App.js */
+  passBackToApp(book, prevShelf, newShelf)
   {
     if(this.props.onShelfChange)
     {
-      this.props.onShelfChange(book, newShelf, prevShelf);
+      this.props.onShelfChange(book, prevShelf, newShelf);
     }
   }
+
   render(){
     var list = this.props.bookList;
     var shelfType = this.props.shelfType;
@@ -22,7 +27,7 @@ class BookShelfType extends Component {
                       (book, prevShelf, newShelf)=>
                       {this.passBackToApp(book, prevShelf, newShelf)
                       }
-                  } book={book} shelfVal={shelfVal}/>))}
+                  } book={book} shelfVal={shelfVal} key={book.id}/>))}
              </ol>
         </div>
       </div>

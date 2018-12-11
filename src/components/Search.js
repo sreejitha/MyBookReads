@@ -9,33 +9,42 @@ class Search extends Component {
     filteredBooks :[]
   }
 
+  /*searches for book amongst shelved books and returns the shelf in which
+  found*/
   returnShelf = (obj, list) => {
     var i;
-    console.log("searching for " + obj.title);
     for (i = 0; i < list.length; i++) {
         if (list[i].title === obj.title) {
-            console.log("title:" + list[i].title)
-            console.log("match found");
-            console.log("shelf:" +  list[i].shelf);
             return list[i].shelf;
         }
     }
     return "not found";
   }
+
+  /*
+  sets state of query and filteredBooks based on input
+  */
   updateQuery = (query) => {
       this.setState({
         query
       })
-      if (query){
+      this.updateSearchResults(query)
+  }
+  /*sets state of filtered books based on query*/
+  updateSearchResults = (query)=> {
+     if (query){
+
         BooksAPI.search(query).then((books) => {
            if (this.props.shelfBooks) {
              var shelfBooks = this.props.shelfBooks
-            for(var book of books)
+            for(var i=0; i < books.length; i++)
             {
-              var shelf = this.returnShelf(book, shelfBooks);
+              /*search for each book in search results in the shelf*/
+              var shelf = this.returnShelf(books[i], shelfBooks);
+              /*if found add shelf property to the book in search results*/
               if(shelf !== "not found")
               {
-                 book.shelf =  shelf
+                 books[i].shelf =  shelf
               }
             }
           }
@@ -43,7 +52,7 @@ class Search extends Component {
           filteredBooks : books
           })
         })
-       }
+    }
     else {
       this.setState({
       filteredBooks : []
@@ -55,11 +64,23 @@ class Search extends Component {
     this.setState({ query: '' })
   }
 
-  updateShelfFromSearch= (book, newShelf, prevShelf)=> {
-    console.log("Inside updateShelfFromSearch")
+/*updates shelf of book if changed using dropdown in searched books*/
+  updateShelfFromSearch= (book, prevShelf, newShelf)=> {
+    /*update shelf of book in search results*/
+    this.setState((state) => ({
+    filteredBooks: state.filteredBooks.map((b)=>{
+         if(b.id === book.id)
+         {
+           b.shelf = newShelf;
+         }
+          return b;
+       })
+    }));
+    /*update shelf of book in Main Page using function-callback prop
+    provided by App.js*/
     if(this.props.onShelfChange)
     {
-      this.props.onShelfChange(book, newShelf, prevShelf);
+      this.props.onShelfChange(book, prevShelf, newShelf);
     }
   }
   render() {
@@ -79,8 +100,8 @@ class Search extends Component {
         <div className="search-books-results">
            <ol className="books-grid">
                  {Array.isArray(filteredBooks)  && filteredBooks.length > 0 && filteredBooks.map((bk) =>(
-                  <Books onChangeBookCategory= {(book, newShelf, prevShelf)=>{
-                      this.updateShelfFromSearch(book, newShelf, prevShelf)
+                  <Books onChangeBookCategory= {(book, prevShelf, newShelf)=>{
+                      this.updateShelfFromSearch(book, prevShelf, newShelf)
                     }}
                    book={bk} key={bk.id}/>))
                  }

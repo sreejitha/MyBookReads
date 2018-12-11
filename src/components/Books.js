@@ -4,12 +4,11 @@ import React, {
 class Books extends Component {
 
   /*handles moves from one book grid to another*/
-  handleChange(book, newShelf, prevShelf) {
+  handleChange(book, prevShelf, newShelf) {
+    /*this prop is given by the parent (Search/BookShelfType) as a
+    function call-back prop*/
     if (this.props.onChangeBookCategory) {
-      console.log("book:" + book.title);
-      console.log("event target:" + newShelf);
-      console.log("prev shelf:" + prevShelf);
-      this.props.onChangeBookCategory(book, newShelf, prevShelf);
+      this.props.onChangeBookCategory(book, prevShelf, newShelf);
     }
   }
 
@@ -25,7 +24,7 @@ class Books extends Component {
                </div>
                <div className="book-shelf-changer">
                      <select value= {bk.shelf? bk.shelf: "none"} onChange={(event)=>{
-                       this.handleChange(bk, event.target.value, bk.shelf)
+                       this.handleChange(bk, bk.shelf, event.target.value)
                      }}>
                         <option value="move" disabled>Move to</option>
                         <option value="currentlyReading">Currently Reading</option>

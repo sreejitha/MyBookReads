@@ -7,9 +7,12 @@ class BooksApp extends Component {
     CurrentlyReading: [],
     WantToRead: [],
     Read: [],
+    /*All categories of books present in the shelf, unfiltered by
+    shelf category*/
     All:[],
-    showSearchPage: true
+    showSearchPage: false
    }
+
   componentDidMount() {
       BooksAPI.getAll().then((books) => {
       this.setState({
@@ -65,13 +68,17 @@ class BooksApp extends Component {
         break;
     }
   }
-  updateShelf= (book, newShelf, prevShelf)=> {
-    console.log("inside App callback");
-    console.log("new shelf:" + newShelf);
-    console.log("prev shelf:" + prevShelf);
-    this.removeFromShelf(book, prevShelf);
-    this.addToShelf(book, newShelf);
 
+  /*called by child components {BookShelfType, Search}
+  when the dropdown to change shelf of book is triggered in respective pages
+  */
+  updateShelf= (book, prevShelf, newShelf)=> {
+    /*Step 1: Remove from old shelf in the Main Page*/
+    this.removeFromShelf(book, prevShelf);
+    /*Step 2: Add to new shelf in the Main Page*/
+    this.addToShelf(book, newShelf);
+    /*Step 3: Update shelf val in the All list which
+    will update search results in future*/
     var bookId = book.id;
     this.setState((state) => ({
        All: state.All.map((b)=>{
@@ -83,9 +90,9 @@ class BooksApp extends Component {
        })
 
     }));
+    console.log("book updated to shelf:" + book.shelf)
+    /*Step 4: Update shelf val in the API*/
     BooksAPI.update(book, newShelf);
-    console.log("Updated Book in API:" + BooksAPI.get(bookId))
-    console.log("new shelf for book:" + BooksAPI.get(bookId).shelf)
   }
   render() {
     var { CurrentlyReading } = this.state
